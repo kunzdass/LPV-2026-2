@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Alunos</title>
+  <style>
+    th {
+      border: 1px solid black
+    }
+
+    td {
+      border: 1px solid black
+    }
+  </style>
+</head>
+<body>
+  <h3>Cadastro de Alunos</h3>
+  <hr>
+  <form id='formulario'>
+    <label for='nome'>Nome</label><br>
+    <input id='nome' type="text"><br>
+    <label for="nota">Nota</label><br>
+    <input id='nota' type="text"><br><br>
+    <button type='submit'>Salvar</button>
+  </form>
+  <hr>
+  <table>
+    <tr>
+      <th>Nome</th>
+      <th>Nota</th>
+    </tr>
+    <tbody id='corpoTabela'></tbody>
+  </table>
+</body>
+</html>
+
+<script>
+const formulario = document.querySelector('#formulario')
+const inputNome = document.querySelector('#nome')
+const inputNota = document.querySelector('#nota')
+const corpoTabela = document.querySelector('#corpoTabela')
+
+let alunos = []
+
+function adicionarAlunoNaTabela (nome, nota) {
+  // cria CELULA do nome e atribui conteudo
+  const tdNome = document.createElement('td')
+  tdNome.textContent = nome
+
+  // cria CELULA da nota e atribui conteudo
+  const tdNota = document.createElement('td')
+  tdNota.textContent = nota
+
+  // cria nova LINHA para tabela e adiciona as duas CELULAS
+  const tr = document.createElement('tr');
+  tr.appendChild(tdNome)
+  tr.appendChild(tdNota)
+
+  // adicionar a LINHA no CORPO DA TABELA
+  corpoTabela.appendChild(tr)
+}
+
+function salvarAlunoNoLocalStorage (aluno) {
+  buscarAlunosNoLocalStorage()
+  alunos.push(aluno)
+  localStorage.setItem('alunos', JSON.stringify(alunos))
+}
+
+function buscarAlunosNoLocalStorage () {
+  const temNoLocalStorage = localStorage.getItem('alunos')
+  if (!temNoLocalStorage) {
+    alunos = []
+  } else {
+    alunos = JSON.parse(temNoLocalStorage)
+  }
+}
+
+function buscarAlunosAoCarregarATela () {
+  buscarAlunosNoLocalStorage()
+  for (const aluno of alunos) {
+    adicionarAlunoNaTabela(aluno.nome, aluno.nota)
+  }
+}
+
+formulario.addEventListener('submit', (event) => {
+  event.preventDefault()
+  if (!inputNome.value || !inputNota.value) {
+    return alert('Preencha os campos')
+  }
+
+  adicionarAlunoNaTabela(inputNome.value, inputNota.value)
+  salvarAlunoNoLocalStorage({
+    nome: inputNome.value,
+    nota: inputNota.value
+  })
+
+  // limpar campos
+  inputNome.value = ''
+  inputNota.value = ''
+})
+
+buscarAlunosAoCarregarATela()
+</script>
