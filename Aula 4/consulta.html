@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta de CEP</title>
+</head>
+<body>
+  <input type='text' id='cep'>
+  <button id='pesquisar'>Buscar CEP</button>
+  <input type='text' id='cidade' placeholder='Cidade' disabled>
+  <input type='text' id='estado' placeholder='Estado' disabled>
+
+</body>
+</html>
+
+<script>
+const inputCep = document.querySelector('#cep');
+const cidadeInput = document.querySelector('#cidade');
+const estadoInput = document.querySelector('#estado');
+const button = document.querySelector('#pesquisar');
+
+
+button.addEventListener('click', async () => {
+  const cep = inputCep.value;
+  const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+  const resposta = await fetch(url);
+  const jsonCep = await resposta.json();
+
+  cidadeInput.value = jsonCep.localidade;
+  estadoInput.value = jsonCep.estado;
+})
+</script>
