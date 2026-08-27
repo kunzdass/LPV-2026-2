@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta de Campeonatos</title>
+</head>
+<body>
+  <button id='buscarCamps'>Buscar campeonatos</button>
+  <select id='selectCampeonatos'></select>
+  <button id='buscarTabela'>></button>
+  <hr>
+  <table>
+    <tr>
+      <th>Posição</th>
+      <th>Escudo</th>
+      <th>Pontos</th>
+    </tr>
+    <tbody id='corpoTabela'></tbody>
+  </table>
+</body>
+</html>
+
+<script>
+const BASE_URL = 'https://api.api-futebol.com.br/v1';
+const API_KEY = '<SUA CHAVE AQUI>';
+
+const button = document.querySelector('#buscarCamps');
+const buttonbuscarTabela = document.querySelector('#buscarTabela');
+const selectCampeonatos = document.querySelector('#selectCampeonatos');
+const corpoTabela = document.querySelector('#corpoTabela');
+
+async function buscarCampeonatosNaAPI () {
+  const url = BASE_URL + '/campeonatos'
+  const response = await fetch(url, {
+    headers: {
+      'Authorization': `Bearer ${API_KEY}`
+    }
+  })
+  const campeonatos = await response.json();
+  for (const camp of campeonatos) {
+    const option = document.createElement('option');
+    option.value = camp.campeonato_id;
+    option.textContent = camp.nome;
+    selectCampeonatos.appendChild(option)
+  }
+}
+
+async function buscarTabelaNaAPI () {
+  if (!selectCampeonatos.value) {
+    return alert('selecione um campeonato para buscar a tabela')
+  }
+  const url = `${BASE_URL}/campeonatos/${selectCampeonatos.value}/tabela`
+  const response = await fetch(url, {
+    headers: {
+      'Authorization': `Bearer ${API_KEY}`
+    }
+  })
+  const tabelaCampeonato = await response.json();
+  for (const time of tabelaCampeonato) {
+    const linha = document.createElement('tr');
+    const tdPosicao = document.createElement('td');
+    tdPosicao.textContent = time.posicao;
+
+    const tdEscudo = document.createElement('td');
+    const imgEscudo = document.createElement('img');
+    imgEscudo.src = time.time.escudo;
+    imgEscudo.style.width = '48px';
+    tdEscudo.appendChild(imgEscudo)
+
+    const tdPontos = document.createElement('td');
+    tdPontos.textContent = time.pontos;
+
+    linha.appendChild(tdPosicao);
+    linha.appendChild(tdEscudo);
+    linha.appendChild(tdPontos);
+    corpoTabela.appendChild(linha);
+  }
+}
+
+button.addEventListener('click', buscarCampeonatosNaAPI)
+buttonbuscarTabela.addEventListener('click', buscarTabelaNaAPI)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
