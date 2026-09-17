@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista</title>
+</head>
+<body>
+  <ul id='lista'></ul>
+  <button onclick='adicionarItemNaLista()'>+</button>
+</body>
+</html>
+
+<script>
+const listaMae = document.querySelector('#lista')
+const todos = [];
+
+async function adicionarItemNaLista () {
+  const response = await fetch('https://dummyjson.com/todos/random');
+  const json = await response.json();
+  todos.push(json);
+
+  const item = document.createElement('li');
+  item.textContent = json.todo;
+  listaMae.appendChild(item);
+  console.log(todos)
+}
+</script>

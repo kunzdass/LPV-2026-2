@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reatividade</title>
+</head>
+<body>
+  <input type='text' id='inputNome' onkeyup='nomeMudou()' placeholder='Nome completo'>
+  <p>
+    <span id='sobrando'>50</span> caracteres restantes
+  </p>
+</body>
+</html>
+
+<script>
+const inputNome = document.querySelector('#inputNome');
+const caracteresSobrando = document.querySelector('#sobrando')
+
+function nomeMudou () {
+  caracteresSobrando.textContent = 50 - inputNome.value.length;
+}
+</script>
